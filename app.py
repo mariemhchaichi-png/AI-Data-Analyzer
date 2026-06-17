@@ -3,13 +3,32 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
+# -------------------------
+# Configuration
+# -------------------------
+
+st.set_page_config(
+    page_title="AI Data Analyzer",
+    page_icon="📊",
+    layout="wide"
+)
+
+
+# -------------------------
 # Title
+# -------------------------
+
 st.title("📊 AI Data Analyzer")
 
-st.write("Upload your dataset and analyze it 🚀")
+st.write(
+    "Upload your CSV dataset and explore your data 🚀"
+)
 
 
-# Upload CSV
+# -------------------------
+# Upload
+# -------------------------
+
 uploaded_file = st.file_uploader(
     "Choose a CSV file",
     type=["csv"]
@@ -18,35 +37,78 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
 
-    # Read dataset
+
     df = pd.read_csv(uploaded_file)
 
 
-    st.success("Dataset uploaded successfully!")
+    st.success(
+        "Dataset uploaded successfully!"
+    )
 
 
-    # Preview
-    st.subheader("👀 Preview")
-    st.dataframe(df.head())
+    
+
+    st.header("Dataset Preview")
+
+    st.dataframe(
+        df.head()
+    )
 
 
-    # Shape
-    st.subheader("📏 Dataset Shape")
-    st.write(df.shape)
+    # -------------------------
+    # Dataset information
+    # -------------------------
+
+    col1, col2 = st.columns(2)
 
 
+    with col1:
+
+        st.metric(
+            "Rows",
+            df.shape[0]
+        )
+
+
+    with col2:
+
+        st.metric(
+            "Columns",
+            df.shape[1]
+        )
+
+
+
+    # -------------------------
     # Columns
-    st.subheader("📋 Columns")
-    st.write(df.columns.tolist())
+    # -------------------------
+
+    st.header("📋 Columns")
+
+    st.write(
+        df.columns.tolist()
+    )
 
 
+
+    # -------------------------
     # Statistics
-    st.subheader("📊 Statistics")
-    st.dataframe(df.describe())
+    # -------------------------
+
+    st.header("📊 Statistics")
+
+    st.dataframe(
+        df.describe()
+    )
 
 
+
+    # -------------------------
     # Missing values
-    st.subheader("🔍 Missing Values")
+    # -------------------------
+
+    st.header("🔍 Missing Values")
+
 
     missing = df.isnull().sum().reset_index()
 
@@ -55,7 +117,10 @@ if uploaded_file is not None:
         "Missing Values"
     ]
 
-    st.dataframe(missing)
+
+    st.dataframe(
+        missing
+    )
 
 
 
@@ -63,7 +128,7 @@ if uploaded_file is not None:
     # Histogram
     # -------------------------
 
-    st.subheader("📈 Histogram")
+    st.header("📈 Histogram")
 
 
     numeric_columns = df.select_dtypes(
@@ -72,7 +137,7 @@ if uploaded_file is not None:
 
 
     selected_column = st.selectbox(
-        "Choose a numeric column",
+        "Choose numeric column",
         numeric_columns
     )
 
@@ -109,11 +174,11 @@ if uploaded_file is not None:
     # Bar Chart
     # -------------------------
 
-    st.subheader("📊 Bar Chart")
+    st.header("📊 Bar Chart")
 
 
     column = st.selectbox(
-        "Choose column for bar chart",
+        "Choose column",
         df.columns
     )
 
@@ -121,9 +186,102 @@ if uploaded_file is not None:
     chart_data = df[column].value_counts()
 
 
-    st.bar_chart(chart_data)
-    
+    st.bar_chart(
+        chart_data
+    )
 
 
 
-    
+    # -------------------------
+    # Correlation Heatmap
+    # -------------------------
+
+    st.header("Correlation Heatmap")
+
+
+    numeric_df = df.select_dtypes(
+        include="number"
+    )
+
+
+    if len(numeric_df.columns) > 1:
+
+
+        fig, ax = plt.subplots()
+
+
+        correlation = numeric_df.corr()
+
+
+        image = ax.imshow(
+            correlation
+        )
+
+
+        ax.set_xticks(
+            range(len(correlation.columns))
+        )
+
+        ax.set_yticks(
+            range(len(correlation.columns))
+        )
+
+
+        ax.set_xticklabels(
+            correlation.columns,
+            rotation=45
+        )
+
+
+        ax.set_yticklabels(
+            correlation.columns
+        )
+
+
+        st.pyplot(fig)
+
+
+    else:
+
+        st.info(
+            "Not enough numeric columns for correlation"
+        )
+
+
+
+    # -------------------------
+    # Download Report
+    # -------------------------
+
+    st.header("Download Report")
+
+
+    report = f"""
+AI Data Analyzer Report
+
+Rows:
+{df.shape[0]}
+
+Columns:
+{df.shape[1]}
+
+Column names:
+{list(df.columns)}
+
+Missing values:
+
+{missing.to_string()}
+
+
+Statistics:
+
+{df.describe().to_string()}
+"""
+
+
+    st.download_button(
+        label="Download Report",
+        data=report,
+        file_name="analysis_report.txt",
+        mime="text/plain"
+    )
