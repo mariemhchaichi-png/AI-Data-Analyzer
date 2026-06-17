@@ -1,16 +1,19 @@
-#  AI Data Analyzer
+# AI Data Analyzer
 
-A Data Science dashboard built with Streamlit.
+A Data Science dashboard built with Streamlit that allows users to upload CSV datasets, analyze data, and visualize insights.
 
-##  Features
+## Features
 
 - Upload CSV files
-- Preview dataset
-- Display dataset shape
-- Show columns
+- Dataset preview
+- Display dataset dimensions
+- Show dataset columns
 - Statistical analysis
 - Missing values detection
-- Automatic histogram generation
+- Histogram visualization
+- Bar chart visualization
+- Correlation heatmap
+- Download analysis report
 
 ## 🛠 Technologies
 
@@ -18,16 +21,19 @@ A Data Science dashboard built with Streamlit.
 - Streamlit
 - Pandas
 - Matplotlib
+- NumPy
 
-##  Run the project
+## ▶️ Run the project
 
 Install dependencies:
 
 pip install -r requirements.txt
 
+
 Run application:
 
 python -m streamlit run app.py
+
 
 ## 📁 Project Structure
 
@@ -36,4 +42,18 @@ AI-DATA-ANALYZER
 ├── app.py
 ├── titanic.csv
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .gitignore
+
+
+## Dataset
+
+Example dataset used:
+
+Titanic Dataset
+
+The application can analyze any CSV dataset.
+
+## Author
+
+Mariem
