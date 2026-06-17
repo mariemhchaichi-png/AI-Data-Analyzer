@@ -47,15 +47,22 @@ if uploaded_file is not None:
 
     # Missing values
     st.subheader("🔍 Missing Values")
+
     missing = df.isnull().sum().reset_index()
 
-    missing.columns = ["Column", "Missing Values"]
+    missing.columns = [
+        "Column",
+        "Missing Values"
+    ]
 
     st.dataframe(missing)
 
 
 
+    # -------------------------
     # Histogram
+    # -------------------------
+
     st.subheader("📈 Histogram")
 
 
@@ -83,9 +90,11 @@ if uploaded_file is not None:
         f"Distribution of {selected_column}"
     )
 
+
     ax.set_xlabel(
         selected_column
     )
+
 
     ax.set_ylabel(
         "Frequency"
@@ -93,3 +102,28 @@ if uploaded_file is not None:
 
 
     st.pyplot(fig)
+
+
+
+    # -------------------------
+    # Bar Chart
+    # -------------------------
+
+    st.subheader("📊 Bar Chart")
+
+
+    column = st.selectbox(
+        "Choose column for bar chart",
+        df.columns
+    )
+
+
+    chart_data = df[column].value_counts()
+
+
+    st.bar_chart(chart_data)
+    
+
+
+
+    
